@@ -64,6 +64,17 @@ jobs:
           fail_ci_if_error: true
           verbose: true
 
+    - name: Check Coverage Percentage
+      run: |
+          echo "📊 Checking minimum required coverage..."
+          COVERAGE=$(pytest --cov=./ --cov-report=term | grep "TOTAL" | awk '{print $NF}' | sed 's/%//')
+          echo "Coverage obtained: $COVERAGE%"
+          if (( $(echo "$COVERAGE >= 75" | bc -l) )); then
+            echo "❌ Error: Coverage is 75% or more. Deployment is blocked."
+            exit 1
+          fi
+          echo "✅ Coverage is below 75%. Continuing."
+
     - name: Deploy to production
       if: github.ref == 'refs/heads/main' && success()
       uses: johnbeynon/render-deploy-action@v0.0.8
