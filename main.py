@@ -1,14 +1,8 @@
-from flask import Flask, jsonify
+from flask import Flask
+from controller.service_controller import bp
 
 app = Flask(__name__)
-
-@app.route('/')
-def root():
-    return "Servidor funcionando en Python"
-
-@app.route('/healthcheck')
-def healthcheck():
-    return jsonify({"status": "ok"})
+app.register_blueprint(bp)
 
 if __name__ == "__main__":
     port = 8080
