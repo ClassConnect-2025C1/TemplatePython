@@ -42,6 +42,7 @@ jobs:
         source $(conda info --base)/etc/profile.d/conda.sh
         conda activate $CONDA_ENV
         conda install -y flake8 pytest pytest-cov psycopg2
+        pip install -r requirements.txt	
 
     - name: Lint with flake8
       run: |
