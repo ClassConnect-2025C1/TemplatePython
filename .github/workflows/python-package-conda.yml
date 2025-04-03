@@ -10,7 +10,7 @@ jobs:
         image: postgres:latest
         env:
           POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: postgres  # Se establece una contraseña
+          POSTGRES_PASSWORD: "1234"
           POSTGRES_DB: testdb
         ports:
           - 5432:5432
