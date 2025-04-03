@@ -42,7 +42,8 @@ jobs:
         source $(conda info --base)/etc/profile.d/conda.sh
         conda activate $CONDA_ENV
         conda install -y flake8 pytest pytest-cov psycopg2
-        pip install -r requirements.txt
+        pip install -r requirements.txt	
+        pip install pytest pytest-cov  # Install pytest and coverage plugins
 
     - name: Lint with flake8
       run: |
@@ -67,16 +68,14 @@ jobs:
 
     - name: Check Coverage Percentage
       run: |
-        source $(conda info --base)/etc/profile.d/conda.sh
-        conda activate $CONDA_ENV
-        echo "📊 Checking minimum required coverage..."
-        COVERAGE=$(pytest --cov=./ --cov-report=term | grep "TOTAL" | awk '{print $NF}' | sed 's/%//')
-        echo "Coverage obtained: $COVERAGE%"
-        if (( $(echo "$COVERAGE >= 75" | bc -l) )); then
-          echo "❌ Error: Coverage is 75% or more. Deployment is blocked."
-          exit 1
-        fi
-        echo "✅ Coverage is below 75%. Continuing."
+            echo "📊 Checking minimum required coverage..."
+            COVERAGE=$(pytest --cov=./ --cov-report=term | grep "TOTAL" | awk '{print $NF}' | sed 's/%//')
+            echo "Coverage obtained: $COVERAGE%"
+            if (( $(echo "$COVERAGE >= 75" | bc -l) )); then
+              echo "❌ Error: Coverage is 75% or more. Deployment is blocked."
+              exit 1
+            fi
+            echo "✅ Coverage is below 75%. Continuing."
 
     - name: Deploy to production
       if: github.ref == 'refs/heads/main' && success()
