@@ -63,3 +63,10 @@ jobs:
           files: backend/coverage-go.out
           fail_ci_if_error: true
           verbose: true
+
+    - name: Deploy to production
+      if: github.ref == 'refs/heads/main' && success()
+      uses: johnbeynon/render-deploy-action@v0.0.8
+      with:
+        service-id: ${{ secrets.SERVICE_ID }}
+        api-key: ${{ secrets.RENDER_API_KEY }}
